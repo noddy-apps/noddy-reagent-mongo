@@ -1,6 +1,6 @@
 # facts
 
-A noddy web app using clojure, reagent, and mongo db.
+A noddy question and answer app using clojure, reagent, and mongo db.
 
 ## Prerequisites
 
@@ -16,4 +16,4 @@ To start a web server for the application, run:
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2017 The Universe

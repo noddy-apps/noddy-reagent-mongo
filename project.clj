@@ -66,11 +66,6 @@
    [:cljsbuild :builds :app :compiler :output-to]]
 
   :profiles
-;;   {:uberjar {:omit-source true
-;;              :aot :all
-;;              :uberjar-name "facts.jar"
-;;              :source-paths ["env/prod/clj"]
-;;              :resource-paths ["env/prod/resources"]}
   {:uberjar {:omit-source true
              :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
              :cljsbuild
@@ -85,8 +80,6 @@
                  :closure-warnings
                  {:externs-validation :off :non-standard-jsdoc :off}
                  :externs ["react/externs/react.js"]}}}}
-
-
              :aot :all
              :uberjar-name "facts.jar"
              :source-paths ["env/prod/clj"]

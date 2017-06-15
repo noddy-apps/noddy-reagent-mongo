@@ -8,6 +8,10 @@
 
 (def col "facts")
 
+(defstate db*
+  :start (-> env :database-url mg/connect-via-uri)
+  :stop (-> db* :conn mg/disconnect))
+
 (defstate db
   :start (:db db*))
 
@@ -38,7 +42,4 @@
 
 (defn delete-fact!
   [identifiable]
-  (println "trjl> id :" identifiable)
-  (let [res (mc/remove-by-id db col (ObjectId. (:id identifiable)))]
-    (println "trjl> res: " res)))
-
+  (mc/remove-by-id db col (ObjectId. (:id identifiable))))
