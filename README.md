@@ -1,8 +1,6 @@
 # facts
 
-generated using Luminus version "2.9.11.53"
-
-FIXME
+A noddy web app using clojure, reagent, and mongo db.
 
 ## Prerequisites
 
