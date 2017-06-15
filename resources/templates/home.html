@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script>
+  function deleteFact(id) {
+    var csrf = $("#__anti-forgery-token").attr("value");
+    $.ajax({
+        beforeSend: function(request) {
+          request.setRequestHeader("X-CSRF-Token", csrf);
+          request.setRequestHeader("X-XSRF-Token", csrf);
+        },
+        type: "DELETE",
+        url: "/fact?id=" + id,
+        success: function(data){
+            // alert("Data Deleted: " + data.deleted);
+            window.location.replace(data.redirect);
+        }
+    });
+  }
+</script>
+
+<div id="content"></div>
+<input id="token" type="hidden" value="{{csrf-token}}">
+
+
+{% endblock %}
