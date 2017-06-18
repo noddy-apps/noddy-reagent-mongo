@@ -22,13 +22,27 @@
   []
   (layout/render "about.html"))
 
+
+;; (defn validate-fact
+;;   [params]
+;;   (first
+;;    (b/validate
+;;      msg-fn
+;;      params
+;;      :side_1  [v/required [v/min-count 1]]
+;;      :side_2  [v/required [v/min-count 1]])))
 (defn validate-fact
   [params]
-  (first
-   (b/validate
-    params
-    :side_1  [v/required [v/min-count 1]]
-    :side_2  [v/required [v/min-count 1]])))
+  (let [mod_params (-> params
+                       (assoc :title (:side_1 params))
+                       (assoc :notes (:side_2 params))
+                       (dissoc :side_1 :side_2))]
+    (first
+      (b/validate
+        mod_params
+        :title [v/required [v/min-count 1]]
+        :notes [v/required [v/min-count 1]]))))
+
 
 (defn save-fact!
   [{:keys [params]}]

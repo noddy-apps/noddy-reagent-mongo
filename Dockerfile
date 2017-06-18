@@ -2,7 +2,7 @@ FROM java:8-alpine
 # FROM openjdk:latest
 MAINTAINER Temple Cloud <tim.langford@gmail.com>
 
-ADD target/uberjar/facts.jar /facts/app.jar
+ADD target/uberjar/facts.jar /app.jar
 
 EXPOSE 3000
 
@@ -20,4 +20,6 @@ EXPOSE 3000
 # ENTRYPOINT ["java", "-Ddatabase-url=mongodb://127.0.0.1/noddy_facts_dev", "-jar", "/facts/app.jar"]
 
 ENTRYPOINT ["java"]
-CMD ["-Ddatabase-url=mongodb://127.0.0.1/noddy_facts_dev", "-jar", "/facts/app.jar"]
+CMD ["-Ddatabase-url=mongodb://127.0.0.1/noddy_facts_dev", "-jar", "/app.jar"]
+
+

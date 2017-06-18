@@ -46,4 +46,5 @@
 
 (defn delete-fact!
   [identifiable]
+  (println "trjl> identifiable: " identifiable)
   (mc/remove-by-id db col (ObjectId. (:id identifiable))))

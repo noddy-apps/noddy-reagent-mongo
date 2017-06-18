@@ -36,7 +36,7 @@ docker-run:
 		--name ${app_name} \
 		-p 3000:3000 \
 		${registry}/${app_name} \
-		-Ddatabase-url=${database_url} -jar /facts/app.jar
+		-Ddatabase-url=${database_url} -jar /app.jar
 
 docker-stop:
 	docker rm -f ${app_name}
