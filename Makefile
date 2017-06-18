@@ -1,6 +1,8 @@
 app_name?=noddy-reagent-mongo
 registry?=templecloud
 database_url?=mongodb://127.0.0.1/noddy_facts_dev
+# database_url?='mongodb://192.168.0.6/noddy_facts_dev'
+
 
 run:
 	lein run
@@ -20,7 +22,6 @@ auto-test:
 build-jar:
 	lein uberjar
 
-# 'mongodb://192.168.0.6/noddy_facts_dev'
 run-jar:
 	java -jar target/uberjar/facts.jar -Ddatabase-url=${database_url} 
 	
@@ -31,4 +32,15 @@ docker-push:
 	docker push ${registry}/${app_name}
 
 docker-run:
-	docker run -p 3000:3000 --name ${app_name} ${registry}/${app_name}
+	docker run -d \
+		--name ${app_name} \
+		-p 3000:3000 \
+		${registry}/${app_name} \
+		-Ddatabase-url=${database_url} -jar /facts/app.jar
+
+docker-stop:
+	docker rm -f ${app_name}
+
+docker-logs:
+	docker logs -tf ${app_name}
+
