@@ -8,8 +8,12 @@
 
 (def col "facts")
 
+;; (defstate db*
+;;   :start (-> env :database-url mg/connect-via-uri)
+;;   :stop (-> db* :conn mg/disconnect))
+
 (defstate db*
-  :start (-> env :database-url mg/connect-via-uri)
+  :start (do (println "db-url: " (:database-url env)) (-> env :database-url mg/connect-via-uri))
   :stop (-> db* :conn mg/disconnect))
 
 (defstate db

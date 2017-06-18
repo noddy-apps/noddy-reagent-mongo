@@ -2,11 +2,7 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [ajax.core :refer [DELETE GET POST]]))
 
-(defn errors-component
-  [errors id]
-  (when-let [error (id @errors)]
-    [:div.alert.alert-danger (clojure.string/join error)]))
-
+;; data functions
 
 (defn delete-fact!
   [id facts]
@@ -29,20 +25,7 @@
     {:headers {"Accept" "application/transit+json"}
      :handler #(reset! facts (vec %))}))
 
-(defn fact-list
-  [facts]
-  [:ul.content
-   (for
-     [{:keys [timestamp id side_1 side_2]} @facts]
-      ^{:key timestamp}
-      [:li
-       [:time (.toLocaleString timestamp)]
-       [:p side_1]
-       [:p side_2]
-       [:input.btn.btn-primary {:type :submit
-                                :on-click #(delete-fact! id facts)
-                                :value "delete"}]
-       ])])
+
 
 (defn save-fact!
   [fields errors facts]
@@ -60,14 +43,38 @@
                            (.error js/console (str "error:" %))
                            (reset! errors (get-in % [:response :errors])))}))
 
+
+;; dom generation functions
+
+
+(defn errors-component
+  [errors id]
+  (when-let [error (id @errors)]
+    [:div.alert.alert-danger (clojure.string/join error)]))
+
+
+(defn home
+  []
+  (let [facts (atom nil)]
+    (get-facts facts)
+    (fn []
+      [:div
+       [:div.row
+         [:div.col-4.offset-md-3
+          [fact-form facts]]]
+       [:div.row
+        [:div.col-4.offset-md-3
+         [fact-list facts]]]])))
+
+
 (defn fact-form
   [facts]
   (let [fields (atom {})
         errors (atom nil)]
     (fn []
-      [:div.content.span12
-       [:div.form-group.span12
-        [:p "Question:"
+      [:div.content
+       [:div.form-group
+        [:p "Title:"
          [:input.form-control
           {:type :text
            :name :side_1
@@ -75,7 +82,7 @@
            :on-change #(swap! fields
                               assoc :side_1 (-> % .-target .-value))}]]
         [errors-component errors :side_1]
-        [:p "Answer:"
+        [:p "Note:"
          [:textarea.form-control
           {:rows 4
            :cols 50
@@ -90,19 +97,54 @@
         [errors-component errors :server-error]]])))
 
 
-(defn home
-  []
-  (let [facts (atom nil)]
-    (get-facts facts)
-    (fn []
-      [:div
-       [:div.row
-         [:div.span12
-          [fact-form facts]]]
-       [:div.row
-        [:div.span12
-         [fact-list facts]]]
-       ])))
+
+;; (defn fact-list
+;;   [facts]
+;;   [:ul.content
+;;    (for
+;;      [{:keys [timestamp id side_1 side_2]} @facts]
+;;       ^{:key timestamp}
+;;       [:li {:style {:padding "0px"}}
+;;        [:div {:style {:border-style "solid"
+;;                       :border-width "1px"
+;;                       :border-color "lightgray"
+;;                       :border-radius "5px"
+;;                       :padding "10px"}}
+;;          [:row
+;;          [:time (.toLocaleString timestamp)]
+;;          [:input.btn.btn-primary.btn-sm.pull-right {:type :submit
+;;                                                     :on-click #(delete-fact! id facts)
+;;                                                     :value "delete"}]
+;;          ]
+;;           [:p [:b side_1]]
+;;          [:hr]
+;;          [:p side_2]
+;;         ]
+;;        [:br]])])
+
+(defn fact-list
+  [facts]
+  [:div.content
+   (for
+     [{:keys [timestamp id side_1 side_2]} @facts]
+      ^{:key timestamp}
+      [:row {:style {:padding "0px"}}
+       [:div {:style {:border-style "solid"
+                      :border-width "1px"
+                      :border-color "lightgray"
+                      :border-radius "5px"
+                      :padding "10px"}}
+         [:row
+           [:small [:time (.toLocaleString timestamp)]]
+           [:input.btn.btn-outline-danger.btn-sm.pull-right {:type :submit
+                                                        :on-click #(delete-fact! id facts)
+                                                        :value "delete"}]]
+         [:p [:b side_1]]
+         [:hr]
+         [:p side_2]]
+       [:br]])])
+
+;; reagent render function
 
 (reagent/render
   [home]
