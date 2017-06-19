@@ -19,10 +19,10 @@ test:
 auto-test:
 	lein test-refresh
 
-build-jar:
+build-uberjar:
 	lein uberjar
 
-run-jar:
+run-uberjar:
 	java -jar target/uberjar/facts.jar -Ddatabase-url=${database_url} 
 	
 docker-build:
